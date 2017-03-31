@@ -60,9 +60,9 @@ new() ->
     new(Opts).
 
 new(Opts) ->
-    Field = opts:val(field, ?FIELD_BY, Opts),
-    Line = opts:val(line,  ?LINE_BY, Opts),
-    Quote = opts:val(qoute,  ?QUOTE, Opts),
+    Field = proplists:get_value(field, Opts, ?FIELD_BY),
+    Line = proplists:get_value(line, Opts, ?LINE_BY),
+    Quote = proplists:get_value(qoute, Opts, ?QUOTE),
     {ok, MP} = re:compile(<<"(",Quote/binary,")?",
                             "(?(1)",
                             "((",Quote/binary, "{2}|[^",Quote/binary,"])*",Quote/binary,")",

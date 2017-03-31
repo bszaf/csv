@@ -40,6 +40,7 @@
 -type(stream() :: {s, any(), function()}).
 
 -define(NULL,  {}).
+-define(DEFAULT_BUFFER_SIZE, 64 * 1024).
 
 
 %%
@@ -114,12 +115,12 @@ file(File) ->
     file(File, []).
 
 file(File, Opts) ->
-    Chunk = opts:val(iobuf, 64 * 1024, Opts),
+    Chunk = proplists:get_value(iobuf, Opts, ?DEFAULT_BUFFER_SIZE),
     {ok, FD} = file:open(File, [raw, binary, read, {read_ahead, Chunk}]),
     istream(FD, Chunk).
 
 file(File, Opts, Stream) ->
-    Chunk = opts:val(iobuf, 64 * 1024, Opts),
+    Chunk = proplists:get_value(iobuf, Opts, ?DEFAULT_BUFFER_SIZE),
     {ok, FD} = file:open(File, [raw, binary, append, {delayed_write, Chunk, 5000}]),
     ostream(FD, Stream).
 
